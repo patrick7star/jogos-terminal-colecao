@@ -26,14 +26,11 @@ impl Bola {
       let l:i32 = self.esqueleto.posicao.y as i32;
       let c:i32 = self.esqueleto.posicao.x as i32;
       // desenhando objeto propriamente...
-      init_pair(1, COLOR_RED, TRANSPARENTE);
       tabuleiro.attrset(A_BOLD);
       tabuleiro.color_set(1);
       tabuleiro.mvaddch(l,c,self.esqueleto.forma);
       tabuleiro.attrset(A_NORMAL);
       tabuleiro.color_set(0);
-      // plotando alteração.
-      // tabuleiro.refresh();
    }
 }
 
@@ -50,17 +47,12 @@ impl Barra {
          .to_string()
          .repeat(self.comprimento as usize)
       };
-      // palete de cor:
-      init_pair(0, COLOR_WHITE, TRANSPARENTE);
-      init_pair(2, COLOR_YELLOW, TRANSPARENTE);
       // desenha.
       tabuleiro.attrset(A_BOLD);
       tabuleiro.color_set(2);
       tabuleiro.mvaddstr(l, c, formato.as_str());
       tabuleiro.color_set(0);
       tabuleiro.attrset(A_NORMAL);
-      // plotando alteração.
-      // tabuleiro.refresh();
    }
 }
 
@@ -406,7 +398,7 @@ fn animacao_de_inercia_pos_termino
          ((bola.area.largura-13)/2) as i32
       );
       // desenha as bordas do tabuleiro.
-      tabuleiro.draw_box(0,0);
+      tabuleiro.border(0,0, 0, 0, 0,0, 0,0);
       // implemetando rebote caso bate na barra.
       colisao_bola_barra(bola, barra);
       // mensagem de termino.
@@ -424,9 +416,6 @@ fn animacao_de_inercia_pos_termino
 
 // exibe uma mensagem de termino do jogo. 
 fn mensagem_termino(t: &Window, d: Dimensao) {
-   // paleta de cor:
-   init_pair(3, COLOR_BLUE, TRANSPARENTE);
-   // atributos e cores...
    t.attrset(A_BLINK);
    t.attrset(A_BOLD);
    t.color_set(3);
@@ -438,43 +427,29 @@ fn mensagem_termino(t: &Window, d: Dimensao) {
    t.attrset(A_NORMAL);
 }
 
-// mensagem de ínicio, para prepara-se do jogo.
+/// Mensagem de ínicio, para prepara-se do jogo.
 fn animacao_de_abertura(t:&Window, d:Dimensao) {
-   let texto = "o jogo inicia em ... ";
+   let texto = "o jogo inicia em ";
+   const ESPACO: &str = "...";
+   #[allow(non_snake_case)]
+   let (C, A) = (d.largura, d.altura); 
+   let strlen = texto.len() as u16;
+   let y = A / 2;
+   let x = (C - strlen) / 2;
    // paleata de cores.
-   init_pair(2, COLOR_RED, TRANSPARENTE);
    t.attrset(A_BOLD);
    t.color_set(2);
-   // um segundo(1)
-   t.mv(
-      (d.altura/2) as i32, 
-      (d.largura/2-(texto.len() as u16)/2) as i32
-   );
-   t.deleteln();
+   t.mv(y as i32, x as i32);
+   // Adiciona o texto e o espaço.
    t.addstr(texto);
-   t.addstr("1");
-   t.refresh();
-   napms(1_000);
-   // dois segundos(2)
-   t.mv(
-      (d.altura/2) as i32, 
-      (d.largura/2-(texto.len() as u16)/2) as i32
-   );
-   t.deleteln();
-   t.addstr(texto);
-   t.addstr("2");
-   t.refresh();
-   napms(1_000);
-   // três segundos(3)
-   t.mv(
-      (d.altura/2) as i32, 
-      (d.largura/2-(texto.len() as u16)/2) as i32
-   );
-   t.deleteln();
-   t.addstr(texto);
-   t.addstr("3");
-   t.refresh();
-   napms(1_000);
+
+   for numero in 1..=3
+   {
+      t.addstr(ESPACO);
+      t.addstr(numero.to_string());
+      t.refresh();
+      napms(1_000);
+   }
    t.color_set(0);
    t.attrset(A_NORMAL);
 }

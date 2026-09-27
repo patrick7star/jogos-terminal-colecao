@@ -11,7 +11,8 @@ mod estatisticas;
 // Importando ferramentas externa:
 use pancurses::{
    initscr, start_color, use_default_colors, newwin, noecho,
-   curs_set, Window
+   curs_set, Window, init_pair, COLOR_BLUE, COLOR_YELLOW, COLOR_RED,
+   COLOR_WHITE
 };
 // Utilitários referentes as funções internas:
 use graficos::{roda_jogo};
@@ -19,12 +20,12 @@ use estatisticas::{BarraMetadados, BolaMetadados};
 use modelos::{Dimensao, Barra, Ponto, Bola, Direcao};
 
 // cor transparente:
-pub const TRANSPARENTE: i16 = -1;
+pub const TRANSPARENTE: i16 = 0;
 // velocidade(tempo em miliseg de cada novo quadro).
-pub const TAXA_DE_QUADROS: i32 = 150;
+pub const TAXA_DE_QUADROS: i32 = 600;
 // quantidade limite de toques no chão.
 pub const TOQUES_LIMITE: u8 = 3;
-pub const MOVIMENTACAO: usize = 2;
+pub const MOVIMENTACAO: usize = 1;
 
 // execução de testes...
 fn main() {
@@ -82,13 +83,19 @@ fn criacao_e_configuracao_da_janela() -> (Window, Dimensao)
    };
 
    // Configuração da janela:
+   curs_set(0);
+   noecho();
+   start_color();
+   use_default_colors();
    tabuleiro.keypad(true);
    tabuleiro.nodelay(true);
-   curs_set(0);
-   // noecho();
-   // Inicia coloração.
-   // start_color();
-   // use_default_colors();
+
+   // Definição da paleta de cores:
+   init_pair(0, COLOR_WHITE, TRANSPARENTE);
+   init_pair(1, COLOR_RED, TRANSPARENTE);
+   init_pair(2, COLOR_YELLOW, TRANSPARENTE);
+   init_pair(3, COLOR_BLUE, TRANSPARENTE);
+
 
    (tabuleiro, dim)
 }
