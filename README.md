@@ -18,6 +18,9 @@ para futuramente se possa visualizar a partida.
 </a>
 </h3>
 
+![partida de forca](https://github.com/patrick7star/jogos-terminal-colecao/blob/main/data/images/jogo-de-forca-quase-no-fim-palavra-parece-ser-mala.png)
+![forca output](https://github.com/patrick7star/jogos-terminal-colecao/blob/main/data/images/resultado-do-jogo-da-forca-palavra-realmente-e-mala.png)
+
 Um jogo da forca simples feito em Python, com a biblioteca "semigráfica": `ncurses`. O jogo é bem intuitívo quando inicializado, têm: dois campos(um para letras de acerto, outro para erros); a forca e o bonequinho que vai aparecendo; também o campo da pontuação, que basicamente conta as letras acertas e erradas; e o campo de dica com o tema da palavra perguntada. Ao ganhar ou perder, aparece um campo com algumas informações básicas da partida jogada, sabe, o tempo de duração as teclas apertadas na sequência,... se venceu ou não a partida, a verdadeira palavra que estava se buscando e etc.
 
 ## registros das partidas
@@ -30,11 +33,8 @@ O jogo pega e gera as palavras-chaves que são usadas no jogo dos arquivos no di
 # Jogo da Velha '#'
 Jogo da velha, usando uma "interface gráfica" do terminal(ncurses), funciona quase inteiramente via mouse, porém futuramente também funcionará via teclado
 
-
-### imagem de uma partida.
-![partida simples](https://github.com/patrick7star/estritamente-para-transferencia/blob/main/velha-partida.png)
-#### o resultado dela após o termino.
-![resultado da partida acima](https://github.com/patrick7star/estritamente-para-transferencia/blob/main/velha-partida-resultado.png)
+![partida da velha](https://github.com/patrick7star/jogos-terminal-colecao/blob/main/data/images/partida-de-jogo-da-velha-quase-no-fim.png)
+![resultado da partida](https://github.com/patrick7star/jogos-terminal-colecao/blob/main/data/images/resultado-da-partida-de-velha-jogada-no-ncurses.png)
 
 
 # Bate-Bola
