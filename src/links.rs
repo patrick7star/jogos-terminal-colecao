@@ -29,7 +29,7 @@ use std::ffi::{OsStr};
 
 /// Complementa link ao executável à partir do caminho do executável ...
 pub fn computa_caminho(caminho_str: &str) -> PathBuf {
-   const NOME: &'static str = "cobrinha-classica";
+   const NOME: &'static str = "jogos-terminal-colecao";
    let barreira = Some(OsStr::new(NOME));
 
    /* O método novo, busca algo mais flexível. Ele pode capturar o caminho
