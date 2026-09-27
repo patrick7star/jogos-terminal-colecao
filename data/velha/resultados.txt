@@ -3428,3 +3428,627 @@ como o jogo terminou:"
                                   |                                                                  
                                                                                                      
 
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |         X ║     ║ O                                                                 
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         X ║  O  ║                                                                   
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |         X ║     ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |         X ║  X  ║ X                                                                 
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |           ║  O  ║                                                                   
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |           ║  O  ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |         X ║     ║                                                                   
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         X ║  O  ║ O                                                                 
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |         X ║     ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         X ║  O  ║ O                                                                 
+       +  jogo EMPATADO. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  X  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         X ║  O  ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |         X ║     ║ O                                                                 
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         X ║  O  ║                                                                   
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |         X ║     ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |           ║  O  ║                                                                   
+       +  jogo EMPATADO. +        |        ═══╬═════╬════                                                               
+       +                 +        |           ║     ║                                                                   
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |           ║     ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |           ║     ║ O                                                                 
+       +  jogo EMPATADO. +        |        ═══╬═════╬════                                                               
+       +                 +        |           ║     ║ O                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |           ║  O  ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  X  ║ O                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         X ║  O  ║                                                                   
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         O ║  X  ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         X ║  O  ║ O                                                                 
+       +  jogo EMPATADO. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  X  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         X ║  O  ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |           ║     ║                                                                   
+       +  jogo EMPATADO. +        |        ═══╬═════╬════                                                               
+       +                 +        |           ║     ║                                                                   
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |           ║     ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║     ║                                                                   
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         X ║  O  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         O ║  X  ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |         X ║  O  ║ X                                                                 
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         O ║  X  ║ O                                                                 
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |         X ║  O  ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  X  ║ O                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         X ║  O  ║                                                                   
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         O ║  X  ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |           ║     ║                                                                   
+       +  jogo EMPATADO. +        |        ═══╬═════╬════                                                               
+       +                 +        |           ║     ║                                                                   
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |           ║     ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  X  ║                                                                   
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |           ║  O  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |           ║     ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |           ║     ║                                                                   
+       +  jogo EMPATADO. +        |        ═══╬═════╬════                                                               
+       +                 +        |           ║     ║                                                                   
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |           ║     ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |         X ║  O  ║ X                                                                 
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         O ║  X  ║ O                                                                 
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |         X ║  O  ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         X ║  X  ║ O                                                                 
+       +  jogo EMPATADO. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  O  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         X ║  O  ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |           ║     ║ X                                                                 
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         O ║  X  ║ O                                                                 
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |         X ║  O  ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |         O ║  X  ║ O                                                                 
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         X ║  X  ║ X                                                                 
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |         O ║  X  ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  X  ║ O                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  O  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         X ║  X  ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  X  ║ X                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  X  ║ O                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         O ║     ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |           ║  O  ║ X                                                                 
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         O ║  X  ║ O                                                                 
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |         X ║     ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |           ║     ║                                                                   
+       +  jogo EMPATADO. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  X  ║                                                                   
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |           ║  O  ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |         X ║  O  ║                                                                   
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         O ║  X  ║ O                                                                 
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |         O ║  X  ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |           ║     ║ O                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         X ║  O  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         O ║  X  ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |           ║     ║ X                                                                 
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         O ║  X  ║ O                                                                 
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |         X ║  O  ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         X ║  O  ║ X                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  O  ║ O                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         X ║  O  ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |         O ║  X  ║ O                                                                 
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         X ║  X  ║ X                                                                 
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |         O ║  X  ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  O  ║ X                                                                 
+       +  jogo EMPATADO. +        |        ═══╬═════╬════                                                               
+       +                 +        |         X ║  X  ║ O                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         O ║  O  ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         X ║  O  ║ O                                                                 
+       +  jogo EMPATADO. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  X  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         O ║  X  ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         X ║  O  ║ O                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  O  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         O ║  X  ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  O  ║ O                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |           ║  X  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |           ║     ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  X  ║ O                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         X ║  O  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         X ║  O  ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  X  ║ X                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |           ║  O  ║                                                                   
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         X ║     ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |         O ║  X  ║                                                                   
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         X ║  X  ║ O                                                                 
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |         O ║  X  ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |           ║     ║ X                                                                 
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         O ║  X  ║ O                                                                 
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |         X ║  O  ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  X  ║ O                                                                 
+       +  jogo EMPATADO. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  O  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         X ║  O  ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |           ║  X  ║ O                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  X  ║ O                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         X ║     ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  X  ║ O                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         X ║  O  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |           ║     ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |         X ║  O  ║ X                                                                 
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         O ║  X  ║ O                                                                 
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |           ║  O  ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |           ║     ║ X                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  O  ║ O                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         X ║  O  ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  X  ║ X                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  O  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         X ║  O  ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |         O ║  O  ║ X                                                                 
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         X ║  X  ║ X                                                                 
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |         O ║  O  ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  X  ║ O                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  X  ║ O                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |         X ║  O  ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |         X ║  O  ║                                                                   
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         O ║  X  ║ O                                                                 
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |           ║     ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  O  ║ O                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  X  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |           ║     ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  X  ║ O                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         X ║  O  ║ X                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |           ║     ║ O                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |         O ║  X  ║ X                                                                 
+       +  "bola" GANHOU. +        |        ═══╬═════╬════                                                               
+       +                 +        |         O ║  O  ║ O                                                                 
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |           ║     ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |           ║  X  ║ O                                                                 
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         O ║  X  ║                                                                   
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |           ║  X  ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       ++++++++++++++++++         |           ║     ║                                                                   
+       +                +         |         O ║  O  ║ X                                                                 
+       +  "xis" GANHOU. +         |        ═══╬═════╬════                                                               
+       +                +         |         O ║  X  ║ O                                                                 
+       ++++++++++++++++++         |        ═══╬═════╬════                                                               
+                                  |         X ║     ║ X                                                                 
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
+1º jogador: 'X'	2º jogador: 'O'         como o jogo terminou:                                                           
+                                  |                                                                                     
+       +++++++++++++++++++        |           ║     ║                                                                   
+       +                 +        |           ║     ║                                                                   
+       +  jogo EMPATADO. +        |        ═══╬═════╬════                                                               
+       +                 +        |           ║     ║                                                                   
+       +++++++++++++++++++        |        ═══╬═════╬════                                                               
+                                  |           ║     ║                                                                   
+                                  |           ║     ║                                                                   
+                                  |                                                                                     
+                                                                                                                        
+
