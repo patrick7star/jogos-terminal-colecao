@@ -1,0 +1,3 @@
+escolas
+universidades
+bancos

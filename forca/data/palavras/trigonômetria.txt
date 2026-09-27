@@ -1,0 +1,20 @@
+seno
+geomêtria
+cosseno
+tangente
+suplemento
+complemento
+ângulo reto
+radianos
+graus
+raio
+frequência
+idêntidade trigonométricas
+arcos
+triângulo
+leis dos senos
+leis dos cossenos
+equilátero
+escaleno
+isósceles
+retângulo

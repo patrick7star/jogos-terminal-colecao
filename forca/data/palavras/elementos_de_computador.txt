@@ -1,0 +1,15 @@
+mouse
+monitor
+teclado
+bluetooth
+wireless
+hdmi
+cooler
+carregador
+fonte
+placa mãe
+usb
+processador
+gabinete
+cpu
+gpu

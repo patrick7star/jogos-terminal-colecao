@@ -1,0 +1,22 @@
+mouse
+monitor
+teclado
+bluetooth
+wireless
+hdmi
+cooler
+carregador
+fonte
+placa mãe
+usb
+processador
+gabinete
+cpu
+gpu
+touchpad
+impressora
+caixas de som
+placa de rede
+placa de vídeo
+tela touchscreen
+socket
