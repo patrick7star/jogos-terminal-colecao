@@ -3,4 +3,4 @@ forca/data/partidas
 dados/resultados.txt
 Cargo.lock
 target
-./data/partidas.dat
+data/partidas.dat
