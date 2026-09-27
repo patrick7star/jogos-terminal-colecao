@@ -3,6 +3,10 @@ Programa escrito em Rust, que usa o `ncurses` com ambiente gráfico, no jogo da 
 Funciona tanto com as setas, como o teclado númerico desligado(também setas). Já tem partidas
 anteriores registradas, e as realizadas, mesmo que no modo **debug** serão também registradas
 para futuramente se possa visualizar a partida.
+#### Partida da cobrinha
+![partida simples](https://github.com/patrick7star/jogos-terminal-colecao/blob/main/data/jogo-da-cobrinha-demonstração-i.png)
+#### o resultado dela após o termino.
+![resultado da partida acima](https://github.com/patrick7star/jogos-terminal-colecao/blob/main/data/jogo-da-cobrinha-resultado-i.png)
 
 # Forca
 ## descrição dos elementos do jogo-da-forca
