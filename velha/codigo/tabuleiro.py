@@ -1,14 +1,13 @@
-
-# biblioteca do Python:
+# Biblioteca do Python:
 from curses import *
 from math import floor, sqrt
 from random import randint
-# meus módulos:
+# Meus módulos:
 if __name__ == "__main__":
    import sys
    sys.argv.append("..")
 import biblioteca_externa.espiral as BEE
-from codigo.motor import (Fileira, LocalJaPreenchidoError)
+from codigo.motor import (Fileira, LocalJaPreenchidoError, jogadas_restantes)
 from codigo.ponto import *
 
 # o que pode ser importado?
@@ -23,8 +22,7 @@ class ForaTabuleiroError(Exception):
 ...
 
 from enum import (IntEnum, auto)
-# enumerador que representa, individualmente,
-# cada quadrante da tabela.
+# Enumerador que representa, individualmente, cada quadrante da tabela.
 class Quadrantes(IntEnum):
    """
    A contagem começa do superior esquerdo, indo à direita, e para
@@ -47,20 +45,155 @@ class Quadrantes(IntEnum):
 
 from codigo.pecas import Jogadores
 from random import choice
-# tipo de peça que é desenhada lá.
+# Tipo de peça que é desenhada lá.
 MatrizPeca = list[list[str]]
 
-class Tabuleiro:
-   def __init__(self):
-      # personalização do interface gráfica.
-      self.janela = initscr()
-      #configurando janela ...
-      start_color()
-      #use_default_colors()
-      mousemask(True) # habilita mouse.
-      curs_set(0)  # tira o cursor.
-      self.janela.keypad(True) # ativa outras teclas não númericas.
+class Seletor:
+   """
+   Cursor especial que é facilita na jogabilidade do jogo quando o modo do
+   teclado é acionado.
+   """
+   def __init__(self) -> None:
+      super().__init__()
+      self.seletor = Cursor()
+      self.ativado = True
 
+   def desativa_seletor(self) -> None:
+      self.ativado = False
+
+   def desenha_seletor(self) -> bool:
+      "Desenha o 'seletor' na janela do ncurses."
+      if (not self.ativado):
+         return False
+
+      quadrante = self.seletor.atual
+      # retângulo definindo o quadrante.
+      (A, B) = self.grade.limites(quadrante)
+      # dimensões do quadrante.
+      altura = abs(A.y - B.y)
+      largura = abs(A.x - B.x)
+      # cor do seletor.
+      cor = color_pair(3)
+      # parte horizontal.
+      for x in range(0, largura):
+         X = (A.x + x)
+         self.janela.addch(A.y, X, '+', cor)
+         self.janela.addch(B.y, X, '+', cor)
+      # parte vertical.
+      for y in range(0, altura):
+         Y = (A.y + y)
+         self.janela.addch(Y, A.x, '+', cor)
+         self.janela.addch(Y, B.x, '+', cor)
+      # confirma desenho.
+      return True
+
+   def seletor_ativo(self) -> bool:
+      return self.ativado
+
+class StatusBar:
+   def __init__(self, LINHA: int) -> None:
+      super().__init__()
+      self.mensagem = None
+      self.lugar = Ponto(LINHA - 1, 4)
+
+   def desenha_status(self) -> None:
+      posicao = self.lugar
+      (Y, X) = (posicao.y, posicao.x)
+      # De um até cinco, pois o seis com a fonte branca, o texto desparece.
+      cor = color_pair(randint(1, 5))
+      ESPACO = " | "
+      # Movimentos que restam para terminar o jogo.
+      restam = str(jogadas_restantes())
+
+      if self.mensagem is None:
+         self.mensagem = ''
+      else:
+         self.mensagem = "[ERROR]: %s" % self.mensagem
+
+      self.janela.move(Y, X)
+      self.janela.addstr("<S> Sair", cor)
+      self.janela.addstr(ESPACO, cor)
+      self.janela.addstr("Faltam: " + restam, cor)
+      if self.mensagem != '':
+         self.janela.addstr(ESPACO, cor)
+      self.janela.addstr(self.mensagem, cor)
+      # Desativando novamente, apenas uma visualização permitida por erro.
+      self.mensagem = None
+
+class ConstrutorGrafico:
+   """
+   Interface que permite a construção e renderização dos objetos que constituem
+   o tabuleiro.
+   Métodos para fazer o Tabuleiro algo mais dinâmico, e não só uma folha 
+   estática, onde um rabisco é dicífil de apagar e impossível de desfazer. 
+   Algo como uma 'tela', com objetos sendo gerados constantemente.
+   Tenta um método de renderização, ao invés de simplesmente ficar 
+   simplesmente rabiscando a tela uma vez só.
+   """
+   def desenha_barras(self) -> bool:
+      # Elementos que formarão barras do tabuleiro.
+      SIMBOLO           = '&'
+      BARRA_VERTICAL    = '|'
+      BARRA_HORIZONTAL  = '='
+
+      # 'a' de altura e 'c' de comprimento(miniretângulos).
+      (a, c) = (self.barra_v // 3, self.barra_h // 3)
+      (Y, X) = (self.posicao.y, self.posicao.x)
+      if not hasattr(self, "janela"):
+         return False
+      # formando barras horizontais:
+      self.janela.hline(
+         Y + a, X,
+         BARRA_HORIZONTAL,
+         self.barra_h,
+         color_pair(1)
+      )
+      self.janela.hline(
+         Y + 2 * a, X,
+         BARRA_HORIZONTAL,
+         self.barra_h,
+         color_pair(1)
+      )
+      # formando barras verticais:
+      self.janela.vline(
+         Y, X + c,
+         BARRA_VERTICAL,
+         self.barra_v,
+         color_pair(1)
+      )
+      self.janela.vline(
+         Y, X + 2 * c,
+         BARRA_VERTICAL,
+         self.barra_v,
+         color_pair(1)
+      )
+      # as grades foram desenhadas com sucesso.
+      return True
+
+   def redesenha_pecas(self) -> bool:
+      "Desenhando todas peças já colocadas."
+      chave_valor = self.lugares_marcados.items()
+
+      for (quadrante, peca) in chave_valor:
+         posicao = self.grade.quadrante_coordenada(quadrante)
+         self._desenha_matriz(peca, posicao)
+
+   def renderiza(self) -> None:
+      self.janela.erase()
+      # renderizando o tabuleiro e todos seus objetos que o compõem.
+      self.desenha_barras()
+      self.redesenha_pecas()
+      self.desenha_status()
+      self.desenha_seletor()
+
+      if __debug__ and (not self.seletor_ativo()):
+         self.grade.mostra_pontos(self.janela)
+
+      self.janela.refresh()
+
+class Tabuleiro(StatusBar, Seletor, ConstrutorGrafico):
+   @staticmethod
+   def inicia_paleta_de_cores() -> None:
       # paletas de cores:
       init_pair(1, COLOR_MAGENTA, COLOR_WHITE)
       init_pair(2, COLOR_GREEN, COLOR_WHITE)
@@ -69,40 +202,49 @@ class Tabuleiro:
       init_pair(5, COLOR_YELLOW, COLOR_WHITE)
       init_pair(6, COLOR_WHITE, COLOR_WHITE)
 
-      # definindo uma cor do plano de fundo.
-      self.janela.bkgd(' ', color_pair(6))
+   @staticmethod
+   def cria_e_configura_janela() -> window:
+      # personalização do interface gráfica.
+      janela = initscr()
+      #configurando janela ...
+      start_color()
+      #use_default_colors()
+      mousemask(True) # habilita mouse.
+      curs_set(0)  # tira o cursor.
+      janela.keypad(True) # ativa outras teclas não númericas.
 
+      return janela
+
+   def __init__(self) -> None:
+      # personalização do interface gráfica.
+      self.janela = Tabuleiro.cria_e_configura_janela()
+      Tabuleiro.inicia_paleta_de_cores()
+      # Definindo uma cor do plano de fundo.
+      self.janela.bkgd(' ', color_pair(6))
       # dimensão do terminal.
       self.LIN, self.COL = self.janela.getmaxyx()
+      # Obtendo atributos definidos na superclasse.
+      super().__init__(self.LIN)
       # comprimento das barras formando os tabuleiros.
       self.barra_h, self.barra_v = self.COL-35, self.LIN-5
-      # impondo limite caso a tela se redimensiona
-      # bastante.
+      # Impondo limite caso a tela se redimensiona bastante.
       if self.barra_v >= 20 and self.barra_h >= 53:
          self.barra_h = 55
          self.barra_v = 22
-      ...
-      # canto superior esquerdo do retângulo onde
-      # fica a tabela formando o tabuleiro.
+
+      # Canto superior esquerdo do retângulo onde fica a tabela formando 
+      # o tabuleiro.
       Y = (self.LIN // 2) - (self.barra_v // 2)
       X = (self.COL // 2) - (self.barra_h // 2)
-      # criando grade ao invés de tantas variáveis acima.
+      # Criando grade ao invés de tantas variáveis acima.
       self.posicao = Ponto(Y, X)
       dimensao = Dimensao(self.barra_v, self.barra_h)
       self.grade = GradePixelada(self.posicao, dimensao)
-      # marcação dos lugares já marcados.
+      # Marcação dos lugares já marcados.
       self.lugares_marcados = {}
-      # cursor para movimentação via
-      # teclas direcionais.
-      self.seletor = Cursor()
-      self.seletor_ativado = True
-      # info na barra de status.
-      self.mensagem = None
-      self.lugar = Ponto(self.LIN - 1, 4)
-   ...
 
    def marca_vitoria(self, fileira):
-      " marca o 'tiro' de vitória do vencedor. "
+      "Marca o 'tiro' de vitória do vencedor. "
       # compr. da barra horizontais e verticais.
       comprimento = self.barra_h + 5
       comprimentoV = self.barra_v + 2
@@ -171,7 +313,6 @@ class Tabuleiro:
          Q = Ponto(B.y, A.x)
          risco_entre_pontos(self.janela, P, Q)
       ...
-   ...
 
    def _desenha_matriz(self, peca: Jogadores, posicao: Ponto) -> None:
       matriz_str_peca = peca[1]
@@ -188,7 +329,6 @@ class Tabuleiro:
             #cor = color_pair(2)  # [] é verde.
          case _:
             raise Exception("nunca chega até aqui")
-      ...
 
       # desenhando e pintando, pixel por pixel...
       for i in range(m):
@@ -200,173 +340,59 @@ class Tabuleiro:
                matriz_str_peca[i][j], 
                cor_selecionado
             )
-         ...
-      ...
-   ...
 
    def coloca_peca(self, peca: Jogadores, local: Quadrantes) -> None:
-      " informa a peça, e o quadrante que irá desenha-la."
+      "Informa a peça, e o quadrante que irá desenha-la."
       assert isinstance(local, Quadrantes)
       assert isinstance(peca, Jogadores)
+
       posicao = self.grade.quadrante_coordenada(local)
 
-      # verifa se posição já não possui algo.
+      # Verifa se posição já não possui algo.
       if local not in self.lugares_marcados:
-         # registrando o lugar como já marcado.
+         # Registrando o lugar como já marcado.
          self.lugares_marcados[local] = peca
       else:
          raise LocalJaPreenchidoError()
 
       self._desenha_matriz(peca, posicao)
-   ...
 
    def posicao_clicada(self, coord: Ponto) -> Quadrantes:
       """
-      denuncia que local no tabuleiro o mouse
-      clicou, eventuamente, retornando tal local.
+      Denuncia que local no tabuleiro o mouse clicou, eventuamente, 
+      retornando tal local.
       """
       assert(isinstance(coord, Ponto))
+
       resultado = self.grade.quadrante(coord)
+
       if resultado is None:
          # sobe uma exceção por coordenada inválida.
          raise ForaTabuleiroError()
       return resultado
-   ...
 
    def posicoes(self) -> Ponto:
       """
-      obtem a coordenada do clique na janela, e seu respectivo
-      local no tabuleiro.
+      Obtem a coordenada do clique na janela, e seu respectivo local no 
+      tabuleiro.
       """
       try:
          coordenada = getmouse()
-         # invertendo para colocar mais palatável
-         # ao tipo de input do programa.
+         # Invertendo para colocar mais palatável ao tipo de input do programa.
          coord_mouse = (coordenada[2],coordenada[1])
          return Ponto(*coord_mouse)
       except:
          return None
-   ...
 
    def desmancha_tabuleiro(self) -> None:
-      # última visualizada no Tabuleiro.
+      # Última visualizada no Tabuleiro.
       napms(1_000)
-      # renderiza uma última vez.
-      # self.renderiza()
+      # Renderiza uma última vez.
+      self.renderiza()
       endwin()
-   ...
+
    def informa_algo(self, mensagem: str) -> None:
       self.mensagem = mensagem
-...
-
-# elementos que formarão barras do tabuleiro.
-SIMBOLO = '&'
-BARRA_VERTICAL = '|'
-BARRA_HORIZONTAL = '='
-# métodos para fazer o Tabuleiro algo mais
-# dinâmico, e não só uma folha estática, onde
-# um rabisco é dicífil de apagar e impossível
-# de desfazer. Algo como uma 'tela', com objetos
-# sendo gerados constantemente.
-class Tabuleiro(Tabuleiro):
-   """
-   tenta um método de renderização, ao invés de simplesmente ficar
-   simplesmente rabiscando a tela uma vez só.
-   """
-   def desenha_barras(self) -> bool:
-      # 'a' de altura e 'c' de comprimento(miniretângulos).
-      (a, c) = (self.barra_v // 3, self.barra_h // 3)
-      (Y, X) = (self.posicao.y, self.posicao.x)
-      if not hasattr(self, "janela"):
-         return False
-      # formando barras horizontais:
-      self.janela.hline(
-         Y + a, X,
-         BARRA_HORIZONTAL,
-         self.barra_h,
-         color_pair(1)
-      )
-      self.janela.hline(
-         Y + 2 * a, X,
-         BARRA_HORIZONTAL,
-         self.barra_h,
-         color_pair(1)
-      )
-      # formando barras verticais:
-      self.janela.vline(
-         Y, X + c,
-         BARRA_VERTICAL,
-         self.barra_v,
-         color_pair(1)
-      )
-      self.janela.vline(
-         Y, X + 2 * c,
-         BARRA_VERTICAL,
-         self.barra_v,
-         color_pair(1)
-      )
-      # as grades foram desenhadas com sucesso.
-      return True
-   ...
-
-   def redesenha_pecas(self) -> bool:
-      "desenhando todas peças já colocadas."
-      chave_valor = self.lugares_marcados.items()
-      for (quadrante, peca) in chave_valor:
-         posicao = self.grade.quadrante_coordenada(quadrante)
-         self._desenha_matriz(peca, posicao)
-      ...
-   ...
-   def desativa_seletor(self) -> None:
-      self.seletor_ativado = False
-   def desenha_seletor(self) -> bool:
-      quadrante = self.seletor.atual
-      # retângulo definindo o quadrante.
-      (A, B) = self.grade.limites(quadrante)
-      # dimensões do quadrante.
-      altura = abs(A.y - B.y)
-      largura = abs(A.x - B.x)
-      # cor do seletor.
-      cor = color_pair(3)
-      # parte horizontal.
-      for x in range(0, largura):
-         X = (A.x + x)
-         self.janela.addch(A.y, X, '+', cor)
-         self.janela.addch(B.y, X, '+', cor)
-      # parte vertical.
-      for y in range(0, altura):
-         Y = (A.y + y)
-         self.janela.addch(Y, A.x, '+', cor)
-         self.janela.addch(Y, B.x, '+', cor)
-      # confirma desenho.
-      return True
-   ...
-   def desenha_status(self) -> None:
-      if (self.mensagem is None) or (self.lugar is None):
-         return None
-      posicao = self.lugar
-      cor = color_pair(randint(1, 6))
-      self.janela.addstr(
-         posicao.y, posicao.x,
-         self.mensagem, cor
-      )
-      # desativando novamente, apenas
-      # uma visualização permitida por erro.
-      self.mensagem = None
-   ...
-   def renderiza(self) -> None:
-      self.janela.erase()
-      # renderizando o tabuleiro e todos seus objetos que o compõem.
-      self.desenha_barras()
-      self.redesenha_pecas()
-      if __debug__:
-         self.grade.mostra_pontos(self.janela)
-      if self.seletor_ativado:
-         self.desenha_seletor()
-      self.desenha_status()
-      self.janela.refresh()
-   ...
-...
 
 # Tupla contendo os pontos supeior-esquerdo e inferior-direito, nesta
 # ordem, acima podemos abstratamente determinar um retângulo qualquer.
@@ -527,7 +553,6 @@ class Cursor:
    def _get_atual(self):
       return self._atual
    atual = property(_get_atual, None, None, None )
-...
 
 from unittest import (TestCase)
 import random, sys
