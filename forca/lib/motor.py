@@ -1,21 +1,15 @@
-
-
 """
- Motor do jogo, verifica se há vitória,
-faz uma jogada, contêm em sí mesmo, ou 
-importa, todas a variáveis importantes 
-da partida.
+ Motor do jogo, verifica se há vitória, faz uma jogada, contêm em sí mesmo,
+ ou importa, todas a variáveis importantes da partida.
 """
 
-# bibliotecas:
+# Bibliotecas padrão do Python:
 import os, random, sys
+from pathlib import (Path)
 
-# dados:
-# conjunto contendo todas as letras 
-# acertadas durante a partida.
+# Conjunto contendo todas as letras acertadas durante a partida.
 acertos = set([])
-# conjunto contendo todas as letras
-# erradas nas jogadas.
+# Conjunto contendo todas as letras erradas nas jogadas.
 erros = set([])
 # Palavra-chave da partida no momento.
 # Será conseguida de maneira aleatória,
@@ -90,29 +84,32 @@ def trata_vogais(palavra):
 		else: _palavra += c
 	return _palavra
 
-#  Função colhe uma palavra aleatória do banco
-# de dados do programa.
-def palavra_aleatoria():
-	# Caminho padrão ao banco de dados. Está
-	# numa variável, pois pode mudar.
-	if sys.platform == 'linux': caminho = './data/palavras/'
-	if sys.platform == 'win32': caminho = '.\\data\\palavras\\'
-	# lista com todos arquivos no banco de dados.
-	diretorio = os.listdir(path=caminho)
-	# palavra do arquivo.
-	tema = random.choice(diretorio)
-	# escolhendo um dentre todos eles.
-	nome_arq = caminho + tema
-	# marcando a dica do programa.
-	global dica
-	dica = tema[0:tema.index('.')].replace('_', ' ')
-	# Abrindo um arquivo selecionado aleatóriamente
-	# e colhendo uma palavra, de maneira aleatória 
-	# também, dentre todas lá.
-	arq = open(nome_arq, mode='r',encoding='utf-8')
-	palavras = arq.read().split('\n')
-	arq.close()
-	return trata_vogais(random.choice(palavras)).lower()
+def palavra_aleatoria() -> str:
+   "Função colhe uma palavra aleatória do banco de dados do programa."
+   global dica
+
+   # Caminho padrão ao banco de dados. Está numa variável, pois pode mudar.
+   if sys.platform == 'linux':
+      caminho = Path('../data/forca/palavras/')
+   if sys.platform == 'win32':
+      #caminho = '.\\data\\palavras\\'
+      raise OSError("não ainda pensando neste sistema!")
+   # lista com todos arquivos no banco de dados.
+   diretorio = os.listdir(path=caminho)
+   # palavra do arquivo.
+   tema = random.choice(diretorio)
+   # escolhendo um dentre todos eles.
+   nome_arq = caminho.joinpath(tema)
+   # marcando a dica do programa.
+   dica = tema[0:tema.index('.')].replace('_', ' ')
+   # Abrindo um arquivo selecionado aleatóriamente
+   # e colhendo uma palavra, de maneira aleatória 
+   # também, dentre todas lá.
+   arq = open(nome_arq, mode='r',encoding='utf-8')
+   palavras = arq.read().split('\n')
+   arq.close()
+
+   return trata_vogais(random.choice(palavras)).lower()
 
 if __name__ == '__main__':
 	# muitas palavras aleatórias selecionadas...
