@@ -1,18 +1,17 @@
-
 """ fabricante de peças """
 
 # meus módulos.
 from biblioteca_externa.moldura_str import (imprime, matriciar)
+from pathlib import (Path)
 
 # o que pode ser importado.
 __all__ = ["Jogadores"]
 
-# obtem a matriz de tanto a bola, como
-# o xis.
-CAMINHO_BOLA = "dados/bola.txt"
-CAMINHO_XIS = "dados/xis.txt"
-CAMINHO_QUADRADO = "dados/quadrado.txt"
-...
+# Por enquanto se presume uma execução à partir do diretório 'velha'. Por isso
+# os dois pontos no ínicio de cada um.
+CAMINHO_BOLA = Path("../data/velha/bola.txt")
+CAMINHO_XIS = Path("../data/velha/xis.txt")
+CAMINHO_QUADRADO = Path("../data/velha/quadrado.txt")
 
 # lê a formatação das peças dentro dos arquivos.
 try:

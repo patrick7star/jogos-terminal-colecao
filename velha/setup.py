@@ -1,6 +1,8 @@
 #!/bin/python3 -BO
 
 from platform import system as sistema
+from pathlib import (Path)
+
 # dependendo da plataforma, modificar a permisão
 # do script principal, ou instalar depedendências.
 if sistema() == "Windows":
@@ -195,7 +197,9 @@ def visualizacao_resultado_da_partida() -> None:
    print(t)
 
    # registrando no banco de screenshots do tabuleiro.
-   resultado_bd = open("dados/resultados.txt", mode="at")
+   # Considerando-se uma execução do diretório velha, por enquanto...
+   CAMINHO_BD = Path("../data/velha/resultados.txt")
+   resultado_bd = open(CAMINHO_BD, mode="at")
    print(t, file=resultado_bd)
 ...
 
