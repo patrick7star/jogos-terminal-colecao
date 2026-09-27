@@ -28,11 +28,12 @@ Um jogo da forca simples feito em Python, com a biblioteca "semigráfica": `ncur
 
 *Figura 3: Saída após o termina da partida de ´Forca`.*
 
-## registros das partidas
-Todas as partidas realizadas são registradas, com todos dados de final de partida mencionados acima. Um disparo da tela para ver como ficou o "tabuleiro" final, independente do resultado, é também gravado no "banco de dados". Para acessar-lô, visualizar todas suas jogadas, então digite o setup(no caso **forca.py**) do programa a  executar, e o argumento ***últimas_partidas_feitas***, ficaria assim no bash: 
-  - `./forca.py últimas_partidas_feitas`
+### registros das partidas
+Todas as partidas realizadas são registradas, com todos dados de final de partida mencionados acima. Um disparo da tela para ver como ficou o "tabuleiro" final, independente do resultado, é também gravado no "banco de dados". Para acessar-lô, visualizar todas suas jogadas, então digite o setup(no caso **forca.py**) do programa a  executar, e o argumento ***--partidas-feitas***. Para ver todos comandos deste jogo em específico, o comando ***--comando*** permite você visualizar tais opções: 
+  - `./forca.py --partidas-feitas`
+  - `./forca.py --comandos`
 
-## sobre as palavras-chaves
+### sobre as palavras-chaves
 O jogo pega e gera as palavras-chaves que são usadas no jogo dos arquivos no diretório `/data/palavras`. Lá existem vários arquivos, com nomes que são as dicas do jogo, dentro deles estão listadas todas palavras-chaves do jogo. Daí fica fácil presumir que para adicionar novas palavras, é só abrir tais arquivos e adicionar novas palavras, uma por linha, e de preferência de acordo com o tema(nome do arquivo). O mesmo vale para uma nova classe de palavras, porém neste caso ao ínvés de abrir um arquivo existente, você criaria um novo com as palavras relacionadas - lembrando novamente, uma em cada linha - no subdiretório `palavras`, o programa pegária cada _dica(arquivo)_ e suas palavras relacionads em tempo de execução, assim "ampliando o vocábulario" do programa.
 
 # Jogo da Velha '#'
