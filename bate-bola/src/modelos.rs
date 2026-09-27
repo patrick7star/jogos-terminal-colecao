@@ -209,6 +209,12 @@ impl Barra {
       }
    }
 
+   pub fn move_n_vezes(&mut self, dir: Direcao, n: usize)
+   {
+      for _ in 1..=n
+         { self.r#move(dir); }
+   }
+
    // verifica se a barra colidiu com as paredes.
    pub fn colidiu_na_parede(&self) -> bool {
       // alias para legibilidade da expressão lógica.
@@ -302,6 +308,12 @@ impl Bola {
    pub fn r#move(&mut self) {
       let nova_dir = self.direcao_pos_colisao();
       self.esqueleto.faz_passo(nova_dir);
+   }
+
+   pub fn move_n_vezes(&mut self, n: usize)
+   {
+      for _ in 1..=n
+         { self.r#move(); }
    }
 
    /* verifica se a bola passou os limites

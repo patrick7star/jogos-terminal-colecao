@@ -4,15 +4,17 @@ extern crate fastrand;
 extern crate pancurses;
 use pancurses::*;
 
-// biblioteca do Rust:
+// Biblioteca do Rust:
 use std::time::{Instant, Duration};
-
-// módulos propriamente implementados.
+// Módulos propriamente implementados.
 use super::modelos::{
    Bola, Dimensao, Direcao, Barra,
    Parede
 };
-use crate::{TRANSPARENTE, TOQUES_LIMITE, VELOCIDADE};
+use crate::{
+   MOVIMENTACAO, TRANSPARENTE, TOQUES_LIMITE,
+   TAXA_DE_QUADROS
+};
 use super::estatisticas::{BarraMetadados, BolaMetadados};
 
 // implementando fora do módulo a função de plotar
@@ -31,7 +33,7 @@ impl Bola {
       tabuleiro.attrset(A_NORMAL);
       tabuleiro.color_set(0);
       // plotando alteração.
-      tabuleiro.refresh();
+      // tabuleiro.refresh();
    }
 }
 
@@ -58,7 +60,7 @@ impl Barra {
       tabuleiro.color_set(0);
       tabuleiro.attrset(A_NORMAL);
       // plotando alteração.
-      tabuleiro.refresh();
+      // tabuleiro.refresh();
    }
 }
 
@@ -172,8 +174,10 @@ pub fn colisao_bola_barra(bo:&mut Bola, ba:&mut Barra) {
  * da bolinha com as paredes; colisão com 
  * a barra, e etc...
  */
-pub fn barra_status( brr:&Barra, bl:&Bola, 
-janela:&Window, qtd:&u8, qtd_i:&u16, t:Duration) {
+pub fn mostra_barra_status(
+   brr:&Barra, bl:&Bola, janela:&Window, qtd:&u8, qtd_i:&u16, 
+   t:Duration
+){
    // dimensão da janela.
    let dim = Dimensao {
       altura: janela.get_max_y() as u16,
@@ -268,35 +272,37 @@ fn impulsiona_bola(bl:&mut Bola, dir:Direcao) -> Direcao{
  * a cada novo passo. Retorna todos os dados 
  * que foram gerados durante tanta iteração.
  */
-pub fn roda_jogo(barra:&mut Barra, bola:&mut Bola,
-tabuleiro:&Window, janela:&Window) -> (BarraMetadados, BolaMetadados) {
-   // quantia de colisões abaixo.
-   let mut toques_no_chao:u8 = 0;
-   // quantia de choques com a barra.
-   let mut qtd_rebates_barra:u16 = 0;
-   // variável para obter tempo.
+pub fn roda_jogo(
+   barra:&mut Barra, bola:&mut Bola, tabuleiro:&Window,
+   barmetadata: &mut BarraMetadados, ballmetadata: &mut BolaMetadados
+){
+   // Quantia de colisões abaixo.
+   let mut toques_no_chao: u8 = 0;
+   // Quantia de choques com a barra.
+   let mut qtd_rebates_barra: u16 = 0;
+   // Variável para obter tempo.
    let ti:Instant = Instant::now();
-   // mensagem de ínicio.
-   mensagem_inicio(&tabuleiro, bola.area);
-   // coleta de dados.
-   let mut dados_brr = BarraMetadados::gera(barra.comprimento as u8);
-   let mut dados_bl = BolaMetadados::gera();
+   let dados_brr = barmetadata;
+   let dados_bl = ballmetadata;
+
+   animacao_de_abertura(&tabuleiro, bola.area);
    // laço que executa o jogo.
    'unico:loop {
-      // derrota.
+      // apaga "frame" anterior.
+      tabuleiro.clear();
+      // desenha as bordas do tabuleiro.
+      tabuleiro.draw_box(0,0); 
+
+      // Derrota.
       colisoes_monitoramento(
          bola, barra,
          &mut toques_no_chao,
          &mut qtd_rebates_barra
       );
-      if toques_no_chao > TOQUES_LIMITE 
-         { break }
-      // apaga "frame" anterior.
-      tabuleiro.clear();
-      // desenha as bordas do tabuleiro.
-      tabuleiro.draw_box(0,0);
 
-      // coletando dados antes do "evento".
+      if toques_no_chao > TOQUES_LIMITE { break }
+
+      // Coletando dados antes do "evento".
       dados_brr.qtd_rebatidas = qtd_rebates_barra;
       dados_brr.atualiza(
          barra,
@@ -320,54 +326,78 @@ tabuleiro:&Window, janela:&Window) -> (BarraMetadados, BolaMetadados) {
       // implemetando rebote caso bate na barra.
       colisao_bola_barra(bola, barra);
       // move a bola e a barra:
-      bola.r#move();
+      bola.move_n_vezes(MOVIMENTACAO);
          // está baseado na direção dada.
-      let instrucao = match tabuleiro.getch() {
-         Some(Input::KeyRight) => {
-            // pegando comandos dado a barra.
-            dados_brr.total_comandos_dados += 1;
-            // acelerar se o comando for igual a direção atual.
-            if barra.esqueleto.sentido == Direcao::Leste
-               { barra.r#move(Direcao::Leste); }
-            Direcao::Leste
-         },
-         Some(Input::KeyLeft) => {
-            // contando comandos dado a barra.
-            dados_brr.total_comandos_dados += 1;
-            // acelerar se o comando for igual a direção atual.
-            if barra.esqueleto.sentido == Direcao::Oeste
-               { barra.r#move(Direcao::Oeste); }
-            Direcao::Oeste
-         },
-         // também termina o laço.
-         Some(Input::Character(ch)) => {
-            if ch == 's' { break 'unico }
-            else { barra.esqueleto.sentido }
-         },
-         Some(_) | None =>
-            barra.esqueleto.sentido
+      match controle_do_jogo(tabuleiro, barra, dados_brr)
+      { 
+         Some(instrucao) => 
+            { barra.move_n_vezes(instrucao, MOVIMENTACAO); }
+         None => {break 'unico}
       };
-      barra.r#move(instrucao);
-      // desenha bola e barra:
+      // Desenha bola e barra:
       bola.plota_bola(&tabuleiro);
       barra.plota_barra(&tabuleiro);
       // informação barra de status.
-      barra_status(
-         barra, bola, janela, 
+      /*barra_status(
+         barra, bola, tabuleiro, 
          &toques_no_chao, 
          &qtd_rebates_barra,
          ti.elapsed()
-      );
-      // limpa tela.
-      janela.refresh();
+      );*/
       tabuleiro.refresh();
-      napms(VELOCIDADE);
+      napms(TAXA_DE_QUADROS);
    }
 
-   // animação de fim de jogo.
-   let tempo_animacao:Duration = Duration::new(14,500); 
+   animacao_de_inercia_pos_termino(tabuleiro, bola, barra);
+   // termina ambiente gráfico.
+   endwin();
+}
+
+
+/** O joystick do jogo. Aqui ele além mudar a direção da barra, coleta dados
+ *  dos movimentos feitos. Caso o comando seja de sair do jogo, ele retorna
+ *  um 'null(none)'. Assim indica ao loop extero que foi solicitada o
+ *  interrompimento da partida.
+ */
+fn controle_do_jogo(board: &Window, bar: &mut Barra, data: &mut BarraMetadados)
+  -> Option<Direcao>
+{
+   match board.getch()
+   {
+      Some(Input::KeyRight) => {
+         // pegando comandos dado a barra.
+         data.total_comandos_dados += 1;
+         // acelerar se o comando for igual a direção atual.
+         if bar.esqueleto.sentido == Direcao::Leste
+            { bar.r#move(Direcao::Leste); }
+         Some(Direcao::Leste)
+      },
+      Some(Input::KeyLeft) => {
+         // contando comandos dado a barra.
+         data.total_comandos_dados += 1;
+         // acelerar se o comando for igual a direção atual.
+         if bar.esqueleto.sentido == Direcao::Oeste
+            { bar.r#move(Direcao::Oeste); }
+         Some(Direcao::Oeste)
+      },
+      // também termina o laço.
+      Some(Input::Character(ch)) => {
+         if ch == 's' { None }
+         else { Some(bar.esqueleto.sentido) }
+      },
+      Some(_) | None =>
+         Some(bar.esqueleto.sentido)
+   }
+}
+
+fn animacao_de_inercia_pos_termino
+ (tabuleiro: &Window, bola: &mut Bola, barra: &mut Barra) 
+{
+   const PERIODO: Duration = Duration::new(14,500); 
    let contador:Instant = Instant::now();
-   while contador.elapsed() < tempo_animacao {
+
+   while contador.elapsed() < PERIODO 
+   {
       // apaga "frame" anterior.
       tabuleiro.clear();
       // mensagem de status do jogo.
@@ -380,26 +410,20 @@ tabuleiro:&Window, janela:&Window) -> (BarraMetadados, BolaMetadados) {
       // implemetando rebote caso bate na barra.
       colisao_bola_barra(bola, barra);
       // mensagem de termino.
-      mensagem_termino(tabuleiro, bola.area);
+      mensagem_termino(&tabuleiro, bola.area);
       // move a bola e a barra:
       bola.r#move();
       barra.r#move(barra.esqueleto.sentido);
       // desenha bola e barra:
       bola.plota_bola(&tabuleiro);
       barra.plota_barra(&tabuleiro);
-      // limpa tela.
-      janela.refresh();
       tabuleiro.refresh();
-      napms(VELOCIDADE);
+      napms(TAXA_DE_QUADROS);
    }
-   // termina ambiente gráfico.
-   endwin();
-   // retornando dados coletados.
-   return (dados_brr, dados_bl);
 }
 
 // exibe uma mensagem de termino do jogo. 
-fn mensagem_termino(t:&Window, d:Dimensao) {
+fn mensagem_termino(t: &Window, d: Dimensao) {
    // paleta de cor:
    init_pair(3, COLOR_BLUE, TRANSPARENTE);
    // atributos e cores...
@@ -415,7 +439,7 @@ fn mensagem_termino(t:&Window, d:Dimensao) {
 }
 
 // mensagem de ínicio, para prepara-se do jogo.
-fn mensagem_inicio(t:&Window, d:Dimensao) {
+fn animacao_de_abertura(t:&Window, d:Dimensao) {
    let texto = "o jogo inicia em ... ";
    // paleata de cores.
    init_pair(2, COLOR_RED, TRANSPARENTE);
