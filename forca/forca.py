@@ -22,7 +22,7 @@ def mostra_partidas_aglomerado() -> None:
    partidas=[]
 
    try:
-      with open(perfil.arq_aglomerado, "rb") as arquivo:
+      with open(perfil.ARQUIVO_AGLOMERADO, "rb") as arquivo:
          try:
             while True:  
                partidas.append(pickle.load(arquivo))

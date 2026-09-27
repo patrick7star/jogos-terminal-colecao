@@ -1,31 +1,36 @@
-# Perfil da jogada. Basicamente uma 
-# info sobre o que ocorreu, e como 
-# acabou à partida.
-# Aqui pegará a palavra-chave; o tempo
-# que a partida durou; seus erros e 
-# acertos.
+"""
+ Perfil da jogada. Basicamente uma info sobre o que ocorreu, e como acabou à
+ partida. Aqui pegará a palavra-chave; o tempo que a partida durou; seus erros
+ e acertos.
+"""
 
-# bibliotecas do Python:
+# Bibliotecas do Python:
 import shelve, sys, pickle
 from time import time
-# minha biblioteca:
+from pathlib import (Path)
+# Módulos do próprio projeto:
 from .external_lib.arvore import matriciar_str,imprime_matriz
 from lib.moldura_str import emoldura
 
 # o que pode ser importado:
 __all__ = ["Perfil","armazena","faz_backup","mostra_partidas",
-           "arq_aglomerado"]
+           "ARQUIVO_AGLOMERADO"]
 # dados:
 # nome do banco de dados.
 if sys.platform == 'linux':
-	nome_bdd = "./data/partidas"
-	arq_aglomerado = './data/aglomerado.dat'
+   # Dois pontos por enquanto, pois este programa só pode ser corretamenta
+   # executado dentro da pasta de 'forca'. Isso irá mudar futuramente
+   # obviamente, porém tenho que rever o que ele realmente armazena.
+	NOME_BD = Path("../data/forca/partidas")
+	ARQUIVO_AGLOMERADO = Path('../data/forca/aglomerado.dat')
+
 elif sys.platform == 'win32':
-	nome_bdd = '.\\data\\partidas_win'
-	arq_aglomerado = '.\\data\\aglomerado.dat'
+	#NOME_BD = '.\\data\\partidas_win'
+	#ARQUIVO_AGLOMERADO = '.\\data\\aglomerado.dat'
+   raise OSError("não pensado ainda para tal plataforma.")
 
 # Faz um recorte da parte realmente
-# importante da captura de tela, após 
+# importante da captura de tela, após
 # o término do jogo.
 def recorte_importante(tela):
 	matriz = matriciar_str(tela)
@@ -61,7 +66,7 @@ def recorte_importante(tela):
 # classe para armazenar perfil da partida.
 class Perfil:
 	"""
-	 Classe principalmente para registrar dados 
+	 Classe principalmente para registrar dados
 	da partida. Os métodos deles são auxiliares
 	nesta tarefa.
 	"""
@@ -73,12 +78,12 @@ class Perfil:
 	# método construtor.
 	def __init__(self, A, E, pC, dica):
 		# sequência com acertos feitos na partida.
-		self.acertos = tuple(A) 
+		self.acertos = tuple(A)
 		# sequência com erros cometidos durante a partida.
 		self.erros = tuple(E)
 		# marca jogada, a peça utilizada e seu tempo.
 		self.jogadas = {}
-		#"self.tempo" - gerando durante a execução 
+		#"self.tempo" - gerando durante a execução
 		# de um método. Colocada aqui para dizer que
 		# há instâncias implícitas.
 		self.palavra_chave = pC
@@ -88,7 +93,7 @@ class Perfil:
 	# marca o tempo da partida.
 	def marca_tempo(self):
 		"marca tempo do perfil."
-		if len(self.jogadas) == 0: ... 
+		if len(self.jogadas) == 0: ...
 		else:
 			self.tempo = sum(t for s,t in self.jogadas.values())
 	# variáveis de estado da função.
@@ -108,11 +113,11 @@ class Perfil:
 			# a peça jogada, e o segundo, o tempo levado
 			# pelo jogador para fazer-lô.
 			self.jogadas[q]=(peca, tf)
-			# neutralizando função novamente para 
+			# neutralizando função novamente para
 			# novos registros.
 			Perfil.acionada_mj = False
 		else:
-			# se for a primeira vez que essa 
+			# se for a primeira vez que essa
 			# função é acionada, então...
 			Perfil.ti = time()
 			Perfil.acionada_mj = True
@@ -139,7 +144,7 @@ class Perfil:
 			string += '%10iª » \'%s\', %0.3f seg\n' % (c,v[0].upper(),v[1])
 		string += 'palavra-chave: "%s" \n' % self.palavra_chave
 		string += 'dica: "%s" \n' % self.dica
-		# atributos criados ao executar métodos 
+		# atributos criados ao executar métodos
 		# da classe.
 		if 'resultado' in self.__dict__:
 			string += 'resultado: %s\n'%self.resultado
@@ -153,7 +158,7 @@ class Perfil:
 # armazena um perfil no banco de dados.
 def armazena(perfil):
 	# abre banco de dados.
-	banco = shelve.open(nome_bdd)
+	banco = shelve.open(NOME_BD)
 	# cria atributo para perfil, registrando
 	# que partida foi essa.
 	perfil.ordem = len(list(banco.keys())) + 1
@@ -170,7 +175,7 @@ def mostra_partidas():
 		nova.sort(reverse=True)
 		return ['{0}º'.format(n) for n in nova]
 	# abrindo banco de dados.
-	bdd = shelve.open(nome_bdd)
+	bdd = shelve.open(NOME_BD)
 	# se for maior que dez, mostrar apenas os dez últimos.
 	if len(bdd) >= 8:
 		print('as cinco últimas partidas do total de %i:'%len(bdd),end=' ')
@@ -186,7 +191,7 @@ def mostra_partidas():
 # adiciona novos contatos, independente da plataforma.
 def faz_backup():
 	# lendo todos dados do arquivo.
-	arq = open(arq_aglomerado,mode='rb')
+	arq = open(ARQUIVO_AGLOMERADO,mode='rb')
 	perfils = []
 	try:
 		while True: perfils.append(pickle.load(arq))
@@ -199,8 +204,8 @@ def faz_backup():
 		# proposições.
 		A = p1.acertos == p2.acertos
 		B = p1.erros == p2.erros
-		C = p1.tempo == p2.tempo 
-		D = p1.resultado == p2.resultado 
+		C = p1.tempo == p2.tempo
+		D = p1.resultado == p2.resultado
 		E = p1.palavra_chave == p2.palavra_chave
 		F = p1.dica == p2.dica
 		G = p1.jogadas == p2.jogadas
@@ -208,23 +213,23 @@ def faz_backup():
 	# verifica se o perfil pertence a lista
 	# de perfils.
 	def perfil_pertence(perfil, lista):
-		# se a lista estiver vázi, já retornar como 
+		# se a lista estiver vázi, já retornar como
 		# não pertence.
 		if len(lista) == 0: return False
 		for p in lista:
 			if perfils_iguais(p, perfil): return True
-		return False 
-	banco = shelve.open(nome_bdd)
+		return False
+	banco = shelve.open(NOME_BD)
 	for p in banco.values():
 		# se não houver tal perfil, adicionar.
-		if not perfil_pertence(p, perfils): 
+		if not perfil_pertence(p, perfils):
 			# atribuindo uma nova ordem.
 			p.ordem = len(perfils) + 1
 			perfils.append(p)
 	banco.close()
-	# reescrevendo o arquivo, com perfils novos 
+	# reescrevendo o arquivo, com perfils novos
 	# adicionados.
-	arq = open(arq_aglomerado,mode='wb')
+	arq = open(ARQUIVO_AGLOMERADO, mode='wb')
 	for p in perfils: pickle.dump(p, arq)
 	arq.close()
 
@@ -236,7 +241,7 @@ if __name__ == '__main__':
 	armazena(P)
 
 	p = Perfil({'a', 'b','c','i','x'},{'e','k','m'},'abacaxi','é uma fruta')
-	
+
 	p.marca_tempo() # abrindo tempo total.
 
 	p.marca_jogada('a')
@@ -276,7 +281,7 @@ if __name__ == '__main__':
 	p.marca_resultado(True)
 	armazena(p)
 
-	bdd = shelve.open(nome_bdd)
+	bdd = shelve.open(NOME_BD)
 	print('chaves=',bdd)
 	print('quantidade=',str(len(bdd)))
 	for x in bdd.keys(): print(bdd[x])
