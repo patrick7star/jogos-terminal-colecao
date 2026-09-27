@@ -3,10 +3,10 @@ Programa escrito em Rust, que usa o `ncurses` com ambiente gráfico, no jogo da 
 Funciona tanto com as setas, como o teclado númerico desligado(também setas). Já tem partidas
 anteriores registradas, e as realizadas, mesmo que no modo **debug** serão também registradas
 para futuramente se possa visualizar a partida.
-#### Partida da cobrinha
+
 ![partida simples](https://github.com/patrick7star/jogos-terminal-colecao/blob/main/data/jogo-da-cobrinha-demonstração-i.png)
-#### o resultado dela após o termino.
-![resultado da partida acima](https://github.com/patrick7star/jogos-terminal-colecao/blob/main/data/jogo-da-cobrinha-resultado-i.png)
+
+*Figura 1: Demonstração do jogo da cobrinha.*
 
 # Forca
 ## descrição dos elementos do jogo-da-forca
@@ -18,10 +18,14 @@ para futuramente se possa visualizar a partida.
 </a>
 </h3>
 
-![partida de forca](https://github.com/patrick7star/jogos-terminal-colecao/blob/main/data/images/jogo-de-forca-quase-no-fim-palavra-parece-ser-mala.png)
+Um jogo da forca simples feito em Python, com a biblioteca "semigráfica": `ncurses`. O jogo é bem intuitívo quando inicializado, têm: dois campos(um para letras de acerto, outro para erros); a forca e o bonequinho que vai aparecendo; também o campo da pontuação, que basicamente conta as letras acertas e erradas; e o campo de dica com o tema da palavra perguntada. Ao ganhar ou perder, aparece um campo com algumas informações básicas da partida jogada, sabe, o tempo de duração as teclas apertadas na sequência,... se venceu ou não a partida, a verdadeira palavra que estava se buscando e etc.
+![partida de forca](https://github.com/patrick7star/jogos-terminal-colecao/blob/main/data/images/jogo-da-forca-quase-no-fim-palavra-parece-ser-mala.png)
+
+*Figura 2: Durante a partida de jogo da Forca.*
+
 ![forca output](https://github.com/patrick7star/jogos-terminal-colecao/blob/main/data/images/resultado-do-jogo-da-forca-palavra-realmente-e-mala.png)
 
-Um jogo da forca simples feito em Python, com a biblioteca "semigráfica": `ncurses`. O jogo é bem intuitívo quando inicializado, têm: dois campos(um para letras de acerto, outro para erros); a forca e o bonequinho que vai aparecendo; também o campo da pontuação, que basicamente conta as letras acertas e erradas; e o campo de dica com o tema da palavra perguntada. Ao ganhar ou perder, aparece um campo com algumas informações básicas da partida jogada, sabe, o tempo de duração as teclas apertadas na sequência,... se venceu ou não a partida, a verdadeira palavra que estava se buscando e etc.
+*Figura 3: Saída após o termina da partida de ´Forca`.*
 
 ## registros das partidas
 Todas as partidas realizadas são registradas, com todos dados de final de partida mencionados acima. Um disparo da tela para ver como ficou o "tabuleiro" final, independente do resultado, é também gravado no "banco de dados". Para acessar-lô, visualizar todas suas jogadas, então digite o setup(no caso **forca.py**) do programa a  executar, e o argumento ***últimas_partidas_feitas***, ficaria assim no bash: 
@@ -34,7 +38,12 @@ O jogo pega e gera as palavras-chaves que são usadas no jogo dos arquivos no di
 Jogo da velha, usando uma "interface gráfica" do terminal(ncurses), funciona quase inteiramente via mouse, porém futuramente também funcionará via teclado
 
 ![partida da velha](https://github.com/patrick7star/jogos-terminal-colecao/blob/main/data/images/partida-de-jogo-da-velha-quase-no-fim.png)
+
+*Figura 4: Demonstração do jogo Tic-Tac-Toe(Velha).*
+
 ![resultado da partida](https://github.com/patrick7star/jogos-terminal-colecao/blob/main/data/images/resultado-da-partida-de-velha-jogada-no-ncurses.png)
+
+*Figura 5: Resultado demonstrando o final da partida.*
 
 
 # Bate-Bola
