@@ -1,6 +1,6 @@
 [package]
-name = "cobrinha_classica"
-version = "1.2.0"
+name = "cobrinha"
+version = "1.2.1"
 edition = "2018"
 
 [dependencies]
@@ -9,4 +9,4 @@ rand = "0.8.4"
 
 # Apenas funciona na máquina do desenvolvedor. Muda frequentemente também.
 [dev-dependencies]
-utilitarios = { path="../library/rust-utilitarios/" }
+utilitarios = { path="../../library/rust-utilitarios/" }
