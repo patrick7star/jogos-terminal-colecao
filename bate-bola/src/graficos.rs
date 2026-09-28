@@ -1,27 +1,109 @@
-
-// biblioteca externas.
 extern crate fastrand;
 extern crate pancurses;
-use pancurses::*;
 
+// Biblioteca externas.
+use pancurses::*;
 // Biblioteca do Rust:
 use std::time::{Instant, Duration};
 // Módulos propriamente implementados.
-use super::modelos::{
-   Bola, Dimensao, Direcao, Barra,
-   Parede
-};
-use crate::{
-   MOVIMENTACAO, TRANSPARENTE, TOQUES_LIMITE,
-   TAXA_DE_QUADROS
-};
+use super::modelos::{ Bola, Dimensao, Direcao, Barra, Parede };
+use crate::{ MOVIMENTACAO, TOQUES_LIMITE, TAXA_DE_QUADROS };
 use super::estatisticas::{BarraMetadados, BolaMetadados};
 
-// implementando fora do módulo a função de plotar
-// os objetos do jogo:
+
+/* Desenha a cobrinha onde quer que ela vá. Com a array de direções que são 
+ * dado para ela "virar" a cada novo passo. Retorna todos os dados que foram 
+ * gerados durante tanta iteração.
+ */
+pub fn roda_jogo(
+   barra:&mut Barra, bola:&mut Bola, tabuleiro:&Window,
+   barmetadata: &mut BarraMetadados, ballmetadata: &mut BolaMetadados
+){
+   // Quantia de colisões abaixo.
+   let mut toques_no_chao: u8 = 0;
+   // Quantia de choques com a barra.
+   let mut qtd_rebates_barra: u16 = 0;
+   // Variável para obter tempo.
+   let ti:Instant = Instant::now();
+   let dados_brr = barmetadata;
+   let dados_bl = ballmetadata;
+
+   // Desativado no modo debug, pois tira foco do principal.
+   if !(cfg!(debug_assertions))
+      { animacao_de_abertura(&tabuleiro, bola.area); }
+
+   // laço que executa o jogo.
+   'unico:loop {
+      // Apaga "frame" anterior.
+      tabuleiro.clear();
+      // Desenha as bordas do tabuleiro.
+      // tabuleiro.draw_box(0,0); 
+      tabuleiro.draw_box('|', '-');
+
+      // Derrota.
+      colisoes_monitoramento(
+         bola, barra,
+         &mut toques_no_chao,
+         &mut qtd_rebates_barra
+      );
+
+      if toques_no_chao > TOQUES_LIMITE { break }
+
+      // Coletando dados antes do "evento".
+      dados_brr.qtd_rebatidas = qtd_rebates_barra;
+      dados_brr.atualiza(
+         barra,
+         (barra.esqueleto.posicao, barra.esqueleto.sentido)
+      );
+      // renomeando para legibilidade.
+      let pos = bola.esqueleto.posicao;
+      let sent = bola.esqueleto.sentido;
+      let (bateu, parede):(bool, Parede) = bola.colidiu();
+      if bateu { 
+         // colocar ambos.
+         dados_bl.atualiza(
+            Some((pos, sent)), 
+            Some((pos, parede, sent))
+         ); 
+      } 
+      // apenas colocar localização e vetor-sentido.
+      else
+         { dados_bl.atualiza(Some((pos, sent)), None); }
+
+      // implemetando rebote caso bate na barra.
+      colisao_bola_barra(bola, barra);
+      // move a bola e a barra:
+      bola.move_n_vezes(MOVIMENTACAO);
+         // está baseado na direção dada.
+      match controle_do_jogo(tabuleiro, barra, dados_brr)
+      { 
+         Some(instrucao) => 
+            { barra.move_n_vezes(instrucao, MOVIMENTACAO); }
+         None => {break 'unico}
+      };
+      // Desenha bola e barra:
+      bola.desenha_bola(&tabuleiro);
+      barra.desenha_barra(&tabuleiro);
+      // informação barra de status.
+      /*barra_status(
+         barra, bola, tabuleiro, 
+         &toques_no_chao, 
+         &qtd_rebates_barra,
+         ti.elapsed()
+      );*/
+      tabuleiro.refresh();
+      napms(TAXA_DE_QUADROS);
+   }
+
+   // Desativado no modo debug, pois é irrelevante.
+   if !(cfg!(debug_assertions))
+      { animacao_de_inercia_pos_termino(tabuleiro, bola, barra); }
+   endwin();
+}
+// Implementando fora do módulo a função de plotar os objetos do jogo:
 impl Bola {
-   // desenha na tela os bichinhos a serem devorados.
-   pub fn plota_bola(&self, tabuleiro:&Window) { 
+   pub fn desenha_bola(&self, tabuleiro:&Window)
+   {
       // nomeando a coordenada de modo mais legível...
       let l:i32 = self.esqueleto.posicao.y as i32;
       let c:i32 = self.esqueleto.posicao.x as i32;
@@ -36,7 +118,7 @@ impl Bola {
 
 impl Barra {
    // desenha na tela a cobrinha.
-   pub fn plota_barra(&self, tabuleiro:&Window) {
+   pub fn desenha_barra(&self, tabuleiro:&Window) {
       // apelidando variáveis importantes...
       let l:i32 = self.esqueleto.posicao.y as i32;
       let c:i32 = self.esqueleto.posicao.x as i32;
@@ -161,11 +243,8 @@ pub fn colisao_bola_barra(bo:&mut Bola, ba:&mut Barra) {
    }
 }
 
-/* Representa informações no "rodapé" da 
- * tela, tipo: o tempo de jogo, colisões
- * da bolinha com as paredes; colisão com 
- * a barra, e etc...
- */
+/* Representa informações no "rodapé" da tela, tipo: o tempo de jogo, colisões 
+ * da bolinha com as paredes; colisão com a barra, e etc... */
 pub fn mostra_barra_status(
    brr:&Barra, bl:&Bola, janela:&Window, qtd:&u8, qtd_i:&u16, 
    t:Duration
@@ -187,9 +266,8 @@ pub fn mostra_barra_status(
    janela.addstr(format!("\tnum. de rebatidas: {}", *qtd_i)); 
 }
 
-/* conta a quantia de vezes que a bola bate 
- * no "piso" do tabuleiro, e passa tal valor
- * a referência passada. */
+/* Conta a quantia de vezes que a bola bate no "piso" do tabuleiro, e passa tal
+ * valor a referência passada. */
 pub fn colisoes_monitoramento(bl:&Bola, brr:&Barra, 
 contador:&mut u8, rebatidas:&mut u16) {
    if bl.esqueleto.posicao.y == bl.area.altura-1
@@ -198,11 +276,10 @@ contador:&mut u8, rebatidas:&mut u16) {
       { *rebatidas += 1; }
 }
 
-/* da um impulso na direção para que fica 
- * ainda mais caótica o movimento da bolinha.
- * Envia a direção dado para que possa entrar
- * em 'códigos de desvio' sem precisar alterar
- * mais e gerar muita gambiarra. */
+/* Da um impulso na direção para que fica ainda mais caótica o movimento da 
+ * bolinha. Envia a direção dado para que possa entrar em 'códigos de desvio' 
+ * sem precisar alterar mais e gerar muita gambiarra.
+ */
 fn impulsiona_bola(bl:&mut Bola, dir:Direcao) -> Direcao{
    // trabalhando dado a direção.
    match dir {
@@ -258,93 +335,6 @@ fn impulsiona_bola(bl:&mut Bola, dir:Direcao) -> Direcao{
    };
    return dir;
 }
-
-/* desenha a cobrinha onde quer que ela vá. Com
- * a array de direções que são dado para ela "virar"
- * a cada novo passo. Retorna todos os dados 
- * que foram gerados durante tanta iteração.
- */
-pub fn roda_jogo(
-   barra:&mut Barra, bola:&mut Bola, tabuleiro:&Window,
-   barmetadata: &mut BarraMetadados, ballmetadata: &mut BolaMetadados
-){
-   // Quantia de colisões abaixo.
-   let mut toques_no_chao: u8 = 0;
-   // Quantia de choques com a barra.
-   let mut qtd_rebates_barra: u16 = 0;
-   // Variável para obter tempo.
-   let ti:Instant = Instant::now();
-   let dados_brr = barmetadata;
-   let dados_bl = ballmetadata;
-
-   animacao_de_abertura(&tabuleiro, bola.area);
-   // laço que executa o jogo.
-   'unico:loop {
-      // apaga "frame" anterior.
-      tabuleiro.clear();
-      // desenha as bordas do tabuleiro.
-      tabuleiro.draw_box(0,0); 
-
-      // Derrota.
-      colisoes_monitoramento(
-         bola, barra,
-         &mut toques_no_chao,
-         &mut qtd_rebates_barra
-      );
-
-      if toques_no_chao > TOQUES_LIMITE { break }
-
-      // Coletando dados antes do "evento".
-      dados_brr.qtd_rebatidas = qtd_rebates_barra;
-      dados_brr.atualiza(
-         barra,
-         (barra.esqueleto.posicao, barra.esqueleto.sentido)
-      );
-      // renomeando para legibilidade.
-      let pos = bola.esqueleto.posicao;
-      let sent = bola.esqueleto.sentido;
-      let (bateu, parede):(bool, Parede) = bola.colidiu();
-      if bateu { 
-         // colocar ambos.
-         dados_bl.atualiza(
-            Some((pos, sent)), 
-            Some((pos, parede, sent))
-         ); 
-      } 
-      // apenas colocar localização e vetor-sentido.
-      else
-         { dados_bl.atualiza(Some((pos, sent)), None); }
-
-      // implemetando rebote caso bate na barra.
-      colisao_bola_barra(bola, barra);
-      // move a bola e a barra:
-      bola.move_n_vezes(MOVIMENTACAO);
-         // está baseado na direção dada.
-      match controle_do_jogo(tabuleiro, barra, dados_brr)
-      { 
-         Some(instrucao) => 
-            { barra.move_n_vezes(instrucao, MOVIMENTACAO); }
-         None => {break 'unico}
-      };
-      // Desenha bola e barra:
-      bola.plota_bola(&tabuleiro);
-      barra.plota_barra(&tabuleiro);
-      // informação barra de status.
-      /*barra_status(
-         barra, bola, tabuleiro, 
-         &toques_no_chao, 
-         &qtd_rebates_barra,
-         ti.elapsed()
-      );*/
-      tabuleiro.refresh();
-      napms(TAXA_DE_QUADROS);
-   }
-
-   animacao_de_inercia_pos_termino(tabuleiro, bola, barra);
-   // termina ambiente gráfico.
-   endwin();
-}
-
 
 /** O joystick do jogo. Aqui ele além mudar a direção da barra, coleta dados
  *  dos movimentos feitos. Caso o comando seja de sair do jogo, ele retorna
@@ -407,8 +397,8 @@ fn animacao_de_inercia_pos_termino
       bola.r#move();
       barra.r#move(barra.esqueleto.sentido);
       // desenha bola e barra:
-      bola.plota_bola(&tabuleiro);
-      barra.plota_barra(&tabuleiro);
+      bola.desenha_bola(&tabuleiro);
+      barra.desenha_barra(&tabuleiro);
       tabuleiro.refresh();
       napms(TAXA_DE_QUADROS);
    }

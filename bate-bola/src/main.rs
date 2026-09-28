@@ -1,4 +1,4 @@
-#![allow(unused_variables)]
+#![allow(warnings)]
 
 // Bibliotecas externas:
 extern crate pancurses;
@@ -10,29 +10,22 @@ mod estatisticas;
 
 // Importando ferramentas externa:
 use pancurses::{
-   initscr, start_color, use_default_colors, newwin, noecho,
+   initscr, start_color, use_default_colors, noecho,
    curs_set, Window, init_pair, COLOR_BLUE, COLOR_YELLOW, COLOR_RED,
-   COLOR_WHITE
+   COLOR_WHITE, nocbreak
 };
 // Utilitários referentes as funções internas:
 use graficos::{roda_jogo};
 use estatisticas::{BarraMetadados, BolaMetadados};
 use modelos::{Dimensao, Barra, Ponto, Bola, Direcao};
 
-// cor transparente:
-pub const TRANSPARENTE: i16 = 0;
 // velocidade(tempo em miliseg de cada novo quadro).
-pub const TAXA_DE_QUADROS: i32 = 600;
+pub const TAXA_DE_QUADROS: i32 = 100;
 // quantidade limite de toques no chão.
 pub const TOQUES_LIMITE: u8 = 3;
 pub const MOVIMENTACAO: usize = 1;
 
-// execução de testes...
 fn main() {
-   /* ativando unicode characteres...
-   let local = LcCategory::all;
-   setlocale(local, "pt.UTF-8"); */
-
    let (tabuleiro, dim) = criacao_e_configuracao_da_janela();
    let mut barra = Barra::nova(
       fastrand::u16(5..19), '=',
@@ -70,14 +63,10 @@ fn main() {
 
 fn criacao_e_configuracao_da_janela() -> (Window, Dimensao)
 {
+   const TRANSPARENTE: i16 = 0;
    let tabuleiro = initscr();
-   // dimensão da janela.
-   let dim_j:Dimensao = Dimensao {
-      altura: tabuleiro.get_max_y() as u16,
-      largura: tabuleiro.get_max_x() as u16,
-   };
    // Obtendo dimensão do tabuleiro.
-   let dim:Dimensao = Dimensao {
+   let dimensao = Dimensao {
       altura: tabuleiro.get_max_y() as u16,
       largura: tabuleiro.get_max_x() as u16,
    };
@@ -96,6 +85,21 @@ fn criacao_e_configuracao_da_janela() -> (Window, Dimensao)
    init_pair(2, COLOR_YELLOW, TRANSPARENTE);
    init_pair(3, COLOR_BLUE, TRANSPARENTE);
 
+   tabuleiro.draw_box('|', '-');
+   (tabuleiro, dimensao)
+}
 
-   (tabuleiro, dim)
+#[cfg(test)]
+mod tests {
+   extern crate pancurses;
+
+   use pancurses::{napms, endwin};
+
+   #[test]
+   fn criacao_de_um_tabuleiro() {
+      let (board, size) = super::criacao_e_configuracao_da_janela();
+      board.refresh();
+      napms(2000);
+      endwin();
+   }
 }
