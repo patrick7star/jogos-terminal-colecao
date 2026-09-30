@@ -11,12 +11,97 @@ use crate::{ MOVIMENTACAO, TOQUES_LIMITE, TAXA_DE_QUADROS };
 use super::estatisticas::{BarraMetadados, BolaMetadados};
 
 
+pub struct Tabuleiro {
+   // Tela virtual do ncurses que é efetuado o desenho.
+   tela: Window,
+
+   // Dimensão dela. Pode ser menor do que o ncurses ocupa.
+   dimensao: Dimensao,
+
+   // Taxa de quadros por segundo.
+   taxa: i32,
+}
+
+impl Tabuleiro
+{
+   pub fn inicia() -> Self 
+   {
+      let tabuleiro = initscr();
+      // Obtendo dimensão do tabuleiro.
+      let dimensao = Dimensao {
+         altura: tabuleiro.get_max_y() as u16,
+         largura: tabuleiro.get_max_x() as u16,
+      };
+
+      Tabuleiro::configura_janela(&tabuleiro);
+      Tabuleiro::inicia_paleta_de_cores();
+      tabuleiro.draw_box(0, 0);
+
+      Self { tela: tabuleiro, dimensao:dimensao, taxa:TAXA_DE_QUADROS }
+   }
+
+   pub fn dimensao(&self) -> Dimensao
+      { self.dimensao }
+
+   pub fn tela<'x>(&'x mut self) -> &'x Window
+      { &self.tela }
+
+   pub fn entrada(&self) -> Option<Input>
+      { self.tela.getch() }
+
+   pub fn renderiza(&mut self)
+   {
+      self.tela.draw_box(0, 0);
+      self.tela.refresh();
+      napms(self.taxa);
+      self.tela.clear();
+   }
+
+   pub fn mensagem_centralizada(&mut self, texto: &str)
+   {
+      let d = self.dimensao;
+      #[allow(non_snake_case)]
+      let (C, A) = (d.largura, d.altura); 
+      let length = texto.len() as u16;
+      let y = A / 2;
+      let x = (C - length) / 2;
+
+      self.tela.attrset(A_BOLD);
+      self.tela.color_set(2);
+      self.tela.mv(y as i32, x as i32);
+      self.tela.addstr(texto);
+      self.tela.color_set(0);
+      self.tela.attrset(A_NORMAL);
+   }
+
+   fn configura_janela(janela: &Window)
+   {
+      curs_set(0);
+      noecho();
+      cbreak();
+      start_color();
+      use_default_colors();
+      janela.keypad(true);
+      janela.nodelay(true);
+   }
+
+   fn inicia_paleta_de_cores()
+   {
+      const TRANSPARENTE: i16 = 0;
+
+      init_pair(0, COLOR_WHITE, TRANSPARENTE);
+      init_pair(1, COLOR_RED, TRANSPARENTE);
+      init_pair(2, COLOR_YELLOW, TRANSPARENTE);
+      init_pair(3, COLOR_BLUE, TRANSPARENTE);
+   }
+}
+
 /* Desenha a cobrinha onde quer que ela vá. Com a array de direções que são 
  * dado para ela "virar" a cada novo passo. Retorna todos os dados que foram 
  * gerados durante tanta iteração.
  */
 pub fn roda_jogo(
-   barra:&mut Barra, bola:&mut Bola, tabuleiro:&Window,
+   barra:&mut Barra, bola:&mut Bola, tabuleiro:&mut Tabuleiro,
    barmetadata: &mut BarraMetadados, ballmetadata: &mut BolaMetadados
 ){
    // Quantia de colisões abaixo.
@@ -24,23 +109,17 @@ pub fn roda_jogo(
    // Quantia de choques com a barra.
    let mut qtd_rebates_barra: u16 = 0;
    // Variável para obter tempo.
-   let ti:Instant = Instant::now();
+   let ti = Instant::now();
    let dados_brr = barmetadata;
    let dados_bl = ballmetadata;
 
    // Desativado no modo debug, pois tira foco do principal.
    if !(cfg!(debug_assertions))
-      { animacao_de_abertura(&tabuleiro, bola.area); }
+      { animacao_de_abertura(tabuleiro); }
 
    // laço que executa o jogo.
-   'unico:loop {
-      // Apaga "frame" anterior.
-      tabuleiro.clear();
-      // Desenha as bordas do tabuleiro.
-      // tabuleiro.draw_box(0,0); 
-      tabuleiro.draw_box('|', '-');
-
-      // Derrota.
+   'unico: loop {
+      // Verifica se houve uma derrota.
       colisoes_monitoramento(
          bola, barra,
          &mut toques_no_chao,
@@ -82,8 +161,8 @@ pub fn roda_jogo(
          None => {break 'unico}
       };
       // Desenha bola e barra:
-      bola.desenha_bola(&tabuleiro);
-      barra.desenha_barra(&tabuleiro);
+      bola.desenha_bola(tabuleiro.tela());
+      barra.desenha_barra(tabuleiro.tela());
       // informação barra de status.
       /*barra_status(
          barra, bola, tabuleiro, 
@@ -91,12 +170,11 @@ pub fn roda_jogo(
          &qtd_rebates_barra,
          ti.elapsed()
       );*/
-      tabuleiro.refresh();
-      napms(TAXA_DE_QUADROS);
+      tabuleiro.renderiza();
    }
 
    // Desativado no modo debug, pois é irrelevante.
-   if !(cfg!(debug_assertions))
+   if (cfg!(debug_assertions))
       { animacao_de_inercia_pos_termino(tabuleiro, bola, barra); }
    endwin();
 }
@@ -341,10 +419,10 @@ fn impulsiona_bola(bl:&mut Bola, dir:Direcao) -> Direcao{
  *  um 'null(none)'. Assim indica ao loop extero que foi solicitada o
  *  interrompimento da partida.
  */
-fn controle_do_jogo(board: &Window, bar: &mut Barra, data: &mut BarraMetadados)
+fn controle_do_jogo(board: &Tabuleiro, bar: &mut Barra, data: &mut BarraMetadados)
   -> Option<Direcao>
 {
-   match board.getch()
+   match board.entrada()
    {
       Some(Input::KeyRight) => {
          // pegando comandos dado a barra.
@@ -373,73 +451,49 @@ fn controle_do_jogo(board: &Window, bar: &mut Barra, data: &mut BarraMetadados)
 }
 
 fn animacao_de_inercia_pos_termino
- (tabuleiro: &Window, bola: &mut Bola, barra: &mut Barra) 
+ (tabuleiro: &mut Tabuleiro, bola: &mut Bola, barra: &mut Barra) 
 {
    const PERIODO: Duration = Duration::new(14,500); 
    let contador:Instant = Instant::now();
+   let dim = tabuleiro.dimensao();
 
    while contador.elapsed() < PERIODO 
    {
-      // apaga "frame" anterior.
-      tabuleiro.clear();
-      // mensagem de status do jogo.
-      tabuleiro.mv(
-         (bola.area.altura/2) as i32, 
-         ((bola.area.largura-13)/2) as i32
-      );
-      // desenha as bordas do tabuleiro.
-      tabuleiro.border(0,0, 0, 0, 0,0, 0,0);
       // implemetando rebote caso bate na barra.
       colisao_bola_barra(bola, barra);
       // mensagem de termino.
-      mensagem_termino(&tabuleiro, bola.area);
+      mensagem_termino(tabuleiro);
       // move a bola e a barra:
       bola.r#move();
       barra.r#move(barra.esqueleto.sentido);
       // desenha bola e barra:
-      bola.desenha_bola(&tabuleiro);
-      barra.desenha_barra(&tabuleiro);
-      tabuleiro.refresh();
-      napms(TAXA_DE_QUADROS);
+      bola.desenha_bola(tabuleiro.tela());
+      barra.desenha_barra(tabuleiro.tela());
+      tabuleiro.renderiza();
    }
 }
 
-// exibe uma mensagem de termino do jogo. 
-fn mensagem_termino(t: &Window, d: Dimensao) {
-   t.attrset(A_BLINK);
-   t.attrset(A_BOLD);
-   t.color_set(3);
-   // o que mostrar.
-   t.mv( (d.altura/2) as i32, ((d.largura-13)/2) as i32);
-   t.addstr("O jogo acabou!");
+fn mensagem_termino(t: &mut Tabuleiro) 
+{
+   t.tela().attrset(A_BLINK);
+   t.tela().attrset(A_BOLD);
+   t.tela().color_set(3);
+   t.mensagem_centralizada("O Jogo Acabou!");
    // redefinindo novamente...
-   t.color_set(0);
-   t.attrset(A_NORMAL);
+   t.tela().color_set(0);
+   t.tela().attrset(A_NORMAL);
 }
 
 /// Mensagem de ínicio, para prepara-se do jogo.
-fn animacao_de_abertura(t:&Window, d:Dimensao) {
+fn animacao_de_abertura(t: &mut Tabuleiro)
+{
    let texto = "o jogo inicia em ";
-   const ESPACO: &str = "...";
-   #[allow(non_snake_case)]
-   let (C, A) = (d.largura, d.altura); 
-   let strlen = texto.len() as u16;
-   let y = A / 2;
-   let x = (C - strlen) / 2;
-   // paleata de cores.
-   t.attrset(A_BOLD);
-   t.color_set(2);
-   t.mv(y as i32, x as i32);
-   // Adiciona o texto e o espaço.
-   t.addstr(texto);
 
    for numero in 1..=3
    {
-      t.addstr(ESPACO);
-      t.addstr(numero.to_string());
-      t.refresh();
+      let panfleto = format!("{texto} ...{numero}");
+      t.tela().addstr(&panfleto);
+      t.tela().refresh();
       napms(1_000);
    }
-   t.color_set(0);
-   t.attrset(A_NORMAL);
 }

@@ -15,7 +15,7 @@ use pancurses::{
    COLOR_WHITE, nocbreak
 };
 // Utilitários referentes as funções internas:
-use graficos::{roda_jogo};
+use graficos::{roda_jogo, Tabuleiro};
 use estatisticas::{BarraMetadados, BolaMetadados};
 use modelos::{Dimensao, Barra, Ponto, Bola, Direcao};
 
@@ -26,7 +26,8 @@ pub const TOQUES_LIMITE: u8 = 3;
 pub const MOVIMENTACAO: usize = 1;
 
 fn main() {
-   let (tabuleiro, dim) = criacao_e_configuracao_da_janela();
+   let mut tabuleiro = Tabuleiro::inicia();
+   let dim = tabuleiro.dimensao();
    let mut barra = Barra::nova(
       fastrand::u16(5..19), '=',
       Ponto {
@@ -53,40 +54,12 @@ fn main() {
    
    // executando o jogo...
    let dados = roda_jogo(
-      &mut barra, &mut bola, &tabuleiro, &mut barmdt, &mut ballmdt
+      &mut barra, &mut bola, &mut tabuleiro, &mut barmdt, &mut ballmdt
    );
    println!(
       "--- Dados da Barra --- \n{}\n\n--- Dados da Bola ---\n{}\n",
       barmdt, ballmdt
    );
-}
-
-fn criacao_e_configuracao_da_janela() -> (Window, Dimensao)
-{
-   const TRANSPARENTE: i16 = 0;
-   let tabuleiro = initscr();
-   // Obtendo dimensão do tabuleiro.
-   let dimensao = Dimensao {
-      altura: tabuleiro.get_max_y() as u16,
-      largura: tabuleiro.get_max_x() as u16,
-   };
-
-   // Configuração da janela:
-   curs_set(0);
-   noecho();
-   start_color();
-   use_default_colors();
-   tabuleiro.keypad(true);
-   tabuleiro.nodelay(true);
-
-   // Definição da paleta de cores:
-   init_pair(0, COLOR_WHITE, TRANSPARENTE);
-   init_pair(1, COLOR_RED, TRANSPARENTE);
-   init_pair(2, COLOR_YELLOW, TRANSPARENTE);
-   init_pair(3, COLOR_BLUE, TRANSPARENTE);
-
-   tabuleiro.draw_box('|', '-');
-   (tabuleiro, dimensao)
 }
 
 #[cfg(test)]
