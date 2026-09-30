@@ -7,6 +7,7 @@ extern crate fastrand;
 mod graficos;
 mod modelos;
 mod estatisticas;
+mod fisica;
 
 // Importando ferramentas externa:
 use pancurses::{
