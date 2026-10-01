@@ -3,7 +3,7 @@ use std::fmt::{Display, Debug, Formatter, Result as R};
 use std::cmp::PartialEq;
 
 /// enum todas direções de movimentos.
-#[derive(Copy,Clone, Debug)]
+#[derive(Copy, Clone, Debug)]
 pub enum Direcao { 
    Norte, 
    Oeste, 
@@ -14,6 +14,7 @@ pub enum Direcao {
    Nordeste, 
    Sudeste 
 }
+
 impl PartialEq for Direcao {
    // verifica se são iguais.
    fn eq(&self, other:&Self) -> bool {
@@ -59,6 +60,12 @@ impl PartialEq for Direcao {
 */
 #[derive(Copy,Clone)]
 pub struct Ponto { pub y:u16, pub x: u16 }
+
+impl Ponto {
+   pub fn novo<T: Into<u16>>(x: T, y: T) -> Self
+      { Ponto { y: y.into(), x: x.into() }}
+}
+
 impl Display for Ponto {
    fn fmt(&self, formatador:&mut Formatter<'_>) -> R{
       return write!(formatador, "linha={0} coluna={1}", 
