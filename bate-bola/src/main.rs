@@ -71,8 +71,8 @@ mod tests {
 
    #[test]
    fn criacao_de_um_tabuleiro() {
-      let (board, size) = super::criacao_e_configuracao_da_janela();
-      board.refresh();
+      let mut board = super::Tabuleiro::inicia();
+      board.renderiza();
       napms(2000);
       endwin();
    }
