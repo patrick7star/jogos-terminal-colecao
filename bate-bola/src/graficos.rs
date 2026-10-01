@@ -195,7 +195,7 @@ pub fn roda_jogo(
       // move a bola e a barra:
       bola.move_n_vezes(MOVIMENTACAO);
          // está baseado na direção dada.
-      match controle_do_jogo(tabuleiro, barra, dados_brr)
+      match controle_do_jogo(tabuleiro, barra, Some(dados_brr))
       { 
          Some(instrucao) => 
             { barra.move_n_vezes(instrucao, MOVIMENTACAO); }
@@ -276,33 +276,37 @@ contador:&mut u8, rebatidas:&mut u16) {
  *  um 'null(none)'. Assim indica ao loop extero que foi solicitada o
  *  interrompimento da partida.
  */
-fn controle_do_jogo(board: &Tabuleiro, bar: &mut Barra, data: &mut BarraMetadados)
+fn controle_do_jogo
+  (board: &Tabuleiro, bar: &mut Barra, data: Option<&mut BarraMetadados>)
   -> Option<Direcao>
 {
    match board.entrada()
    {
       Some(Input::KeyRight) => {
-         // pegando comandos dado a barra.
-         data.total_comandos_dados += 1;
-         // acelerar se o comando for igual a direção atual.
+         // Pegando comandos dado a barra.
+         if let Some(data) = data
+            { data.total_comandos_dados += 1; }
+         // data.total_comandos_dados += 1;
+
+         // Acelerar se o comando for igual a direção atual.
          if bar.esqueleto.sentido == Direcao::Leste
             { bar.r#move(Direcao::Leste); }
          Some(Direcao::Leste)
-      },
-      Some(Input::KeyLeft) => {
-         // contando comandos dado a barra.
-         data.total_comandos_dados += 1;
-         // acelerar se o comando for igual a direção atual.
+
+      } Some(Input::KeyLeft) => {
+         if let Some(data) = data
+            { data.total_comandos_dados += 1; }
+         // data.total_comandos_dados += 1;
+         // Acelerar se o comando for igual a direção atual.
          if bar.esqueleto.sentido == Direcao::Oeste
             { bar.r#move(Direcao::Oeste); }
          Some(Direcao::Oeste)
-      },
-      // também termina o laço.
-      Some(Input::Character(ch)) => {
-         if ch == 's' { None }
+
+      } Some(Input::Character(ch)) => {
+         // Também termina o laço.
+         if ch == 's' || ch == 'S' || ch == 'q' || ch == 'Q' { None }
          else { Some(bar.esqueleto.sentido) }
-      },
-      Some(_) | None =>
+      } Some(_) | None =>
          Some(bar.esqueleto.sentido)
    }
 }
@@ -352,5 +356,64 @@ fn animacao_de_abertura(t: &mut Tabuleiro)
       t.tela().addstr(&panfleto);
       t.tela().refresh();
       napms(1_000);
+   }
+}
+
+#[cfg(test)]
+mod tests {
+   use super::{
+      Barra, Tabuleiro, Figura, endwin, controle_do_jogo, 
+      MOVIMENTACAO, Duration, Instant, Direcao, Bola
+   };
+   use crate::modelos::{Ponto};
+
+   #[test]
+   fn controle_da_barra_somente()
+   {
+      let mut tabuleiro = Tabuleiro::inicia();
+      let dim = tabuleiro.dimensao();
+      let posicao = Ponto::novo(dim.largura / 2, dim.altura / 2);
+      let mut barra = Barra::nova( 10, '=', posicao, dim);
+
+      'unico: loop {
+         match controle_do_jogo(&mut tabuleiro, &mut barra, None)
+         { 
+            Some(instrucao) => 
+               { barra.move_n_vezes(instrucao, MOVIMENTACAO); }
+            None => {break 'unico}
+         };
+         barra.desenha(tabuleiro.tela());
+         tabuleiro.renderiza();
+      }
+      endwin();
+   }
+
+   #[test]
+   fn movimento_livre_da_bola()
+   {
+      let mut tabuleiro = Tabuleiro::inicia();
+      let dim = tabuleiro.dimensao();
+      let posicao = Ponto::novo(dim.largura / 2, dim.altura / 2);
+      let mut bolas = [
+         Bola::nova(Direcao::Sudoeste, posicao, dim),
+         Bola::nova(Direcao::Sul, posicao, dim),
+         Bola::nova(Direcao::Sudeste, posicao, dim),
+         Bola::nova(Direcao::Nordeste, posicao, dim),
+         Bola::nova(Direcao::Leste, posicao, dim),
+         Bola::nova(Direcao::Noroeste, posicao, dim),
+      ];
+      let clock = Instant::now();
+      const LIMITE: Duration = Duration::from_secs(15);
+
+      while clock.elapsed() < LIMITE 
+      {
+         for bola in bolas.iter_mut()
+         {
+            bola.r#move();
+            bola.desenha(tabuleiro.tela());
+         }
+         tabuleiro.renderiza();
+      }
+      endwin();
    }
 }
